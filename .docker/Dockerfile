@@ -42,7 +42,7 @@ RUN crontab /etc/cron.d/cronjobs
 CMD ["cron", "-f"]
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 81
     
 RUN chown -R www-data:www-data /var/www/html \
      && a2enmod rewrite 
