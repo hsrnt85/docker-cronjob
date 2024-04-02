@@ -4,6 +4,10 @@ USER root
 
 WORKDIR /var/www/html 
 
+# Workaround https://unix.stackexchange.com/questions/2544/how-to-work-around-release-file-expired-problem-on-a-local-mirror
+
+RUN echo "Acquire::Check-Valid-Until \"false\";\nAcquire::Check-Date \"false\";" | cat > /etc/apt/apt.conf.d/10no--check-valid-until
+
 RUN apt-get update && apt-get install -y \
          libpng-dev \
          zlib1g-dev \
@@ -46,7 +50,7 @@ EXPOSE 80
 RUN chown -R www-data:www-data /var/www/html \
      && a2enmod rewrite 
  
-RUN apt-get update && apt-get upgrade -y
+#RUN apt-get update && apt-get upgrade -y
 
 # CMD ["/usr/local/bin/start"]
 
