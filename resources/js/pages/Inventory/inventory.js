@@ -1,0 +1,1 @@
+$("#price").maskMoney({thousands:'', decimal:'.'});

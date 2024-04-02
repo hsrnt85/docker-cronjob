@@ -1,0 +1,145 @@
+@extends('layouts.master')
+
+@section('content')
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                {{-- PAGE TITLE --}}
+                <div class="border-bottom border-primary mb-4"><h4 class="card-title">{{ getPageTitle(1) }}</h4></div>
+
+                <form  class="custom-validation" id="form" method="post" action="{{ route('officer.update') }}" >
+                    {{ csrf_field() }}
+
+                    <input class="form-control" type="hidden" id="id" name="id" value="{{ $officer->id}}">
+
+                    <div class="mb-3 row">
+                        <label class="col-md-2 col-form-label">Daerah  </label>
+                        <div class="col-md-10">
+                            <select class="form-control" name="district" disabled>
+                                <option value="">-- Pilih Daerah --</option>
+                                @foreach($districtAll as $district)
+                                    <option value="{{ $district->id }}" @if($officer->district_id == $district->id) selected @endif>
+                                        {{ ($district->district_name) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="name" class="col-md-2 col-form-label">Pegawai</label>
+                        <div class="col-md-10">
+                            <select class="form-control @error('officer') is-invalid @enderror" name="officer"
+                                required data-parsley-required-message="{{ setMessage('officer.required') }}"
+                                data-parsley-errors-container="#parsley-errors-officer" disabled>
+                                <option value="">-- Pilih Pegawai --</option>
+                                @foreach($userAll as $user)
+                                    <option value="{{$user->users_id }}" @if($officer->users_id == $user->users_id) selected @endif >
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 mt-1" id="parsley-errors-officer"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-md-2 col-form-label">Kumpulan Pegawai </label>
+                        <div class="col-md-10">
+                            @foreach($officerGroupAll as $officerGroup)
+                                <div class="form-check form-check-inline me-2" required>
+                                    <input class="officer_group form-check-input me-2" type="radio" name="officer_group" id="officer_group" value="{{ $officerGroup->id }}" {{ $officer->officer_group_id == $officerGroup->id ? "checked" : "" }}>
+                                    <label class="form-check-label" for="{{ $officerGroup->id }}">
+                                        {{ $officerGroup->officer_group }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <hr/>
+
+                    <div class="row section-officer-category">
+                        <p class="card-title-desc">Senarai Kategori Pegawai <label class="col-form-label"></label></p>
+
+                        <div class="row">
+                            <div class="mb-1" id="parsley-errors-officer-category"></div>
+                        </div>
+
+                        <div class="table-responsive col-sm-10 offset-sm-1">
+                            <table class="table table-sm table-bordered" id="table-quarters-class">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Kategori Pegawai</th>
+                                        <th class="text-center" width="15%">Pilih</th>
+                                        <th class="text-center" width="20%">Semua Daerah?</br>(Hanya Untuk Pegawai Pemantau)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($officerCategoryAll as $i => $officerCategory)
+                                        @php
+                                            $checked=(inArray($officer->officer_category_id, $officerCategory->id)) ? 'checked' : '' ;
+                                            $checked_monitoring_district= ($officer->monitoring_district==1) ? 'checked' : '' ;
+                                        @endphp
+                                        <tr>
+                                            <th scope="row" class="text-center">{{$loop->iteration}}</th>
+                                            <td>{{$officerCategory->category_name}}</td>
+                                            <td class="">
+                                                <div class="form-check d-flex justify-content-center">
+                                                    <input class="officer_category form-check-input me-2  @error('officer_category') is-invalid @enderror" type="checkbox" id="formCheck_{{ $officerCategory->id }}"
+                                                        name="officer_category[]" value="{{ old('officer_category.'.$i, $officerCategory->id, $officerCategory->id) }}" {{$checked}}
+                                                        required data-parsley-mincheck="1"
+                                                        data-parsley-required-message="{{ setMessage('officer_category.required') }}"
+                                                        data-parsley-mincheck-message="{{ setMessage('officer_category.required') }}"
+                                                        data-parsley-errors-container="#parsley-errors-officer-category">
+                                                    <label class="form-check-label" for="formCheck_{{ $officerCategory->id }}"> </label>
+                                                </div>
+                                            </td>
+                                            <td >
+                                                @if($officerCategory->id==4)
+                                                    <div class="form-check d-flex justify-content-center monitoring-district">
+                                                        <input type="checkbox" class="form-check-input" id="monitoring_district" name="monitoring_district" value="{{ old('monitoring_district.'.$i, 1) }}"  {{$checked_monitoring_district}}>
+                                                        <label class="form-check-label" for="monitoring_district"> Ya</label>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary float-end swal-kemaskini">{{ __('button.kemaskini') }}</button>
+                            <a href="{{ route('officer.index') }}" class="btn btn-secondary float-end me-2">{{ __('button.kembali') }}</a>
+                        </div>
+                    </div>
+                </form>
+
+                <form method="POST" action="{{ route('officer.delete') }}" id="delete-form">
+                    {{ csrf_field() }}
+                    {{ method_field('DELETE') }}
+                    <input class="form-control" type="hidden" id="id-delete" name="id" value="{{ $officer->id }}">
+                </form>
+
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div>
+<!-- end row -->
+
+@endsection
+
+@section('script')
+<script src="{{ URL::asset('assets/js/pages/Officer/officer.js')}}"></script>
+@endsection

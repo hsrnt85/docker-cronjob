@@ -1,0 +1,229 @@
+@extends('layouts.master')
+@section('css')
+    <link href="{{ URL::asset('/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ URL::asset('/assets/libs/datepicker/datepicker.min.css') }}">
+@endsection
+@section('content')
+
+<div class="row">
+    <div class="col-12">
+
+        <!-- section - search  -->
+        <div class="card">
+            <form class="search_form custom-validation" action="{{ route('journalAdjustment.index') }}" method="post" id="form_search_record">
+                {{ csrf_field() }}
+                <div class="card-body p-3">
+                    <div class="border-bottom border-primary mb-4"><h4 class="card-title">Carian Rekod</h4></div>
+                    <div class="row">
+                        <div class="col-md-3 p-1 mb-3" >
+                            <label for="statement_code" class="col-form-label ">No. Jurnal Pelarasan</label>
+                            <div class="input-right-icon">
+                                <input class="form-control" type="text" id="search_jurnal_no" name="search_jurnal_no" value="{{  old('search_jurnal_no', $search_jurnal_no) }}">
+                            </div>
+                        </div>
+                        <div class="col-md-3 p-1 mb-3" >
+                            <label class="col-form-label ">Tarikh Jurnal Pelarasan</label>
+                            <div class="input-group" id="datepicker2">
+                                <input class="form-control"  type="text" placeholder="dd/mm/yyyy" name="search_date" id="search_date"
+                                data-date-format="dd/mm/yyyy" data-date-container='#datepicker2' data-provide="datepicker" autocomplete="off"
+                                data-date-autoclose="true" value="{{  old('search_date', $search_date) }}">
+                                <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 p-1 mb-3">
+                            <button class="btn btn-primary" type="submit">{{ __('button.cari') }}</button>
+                            <button name="reset" class="btn btn-primary" type="submit" onClick ="clearSearchInput()" >{{ __('button.reset') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- end section - search  -->
+
+        <div class="card">
+            <div class="card-body">
+                {{-- PAGE TITLE --}}
+                <div class="border-bottom border-primary mb-4"><h4 class="card-title">{{ getPageTitle(1) }}</h4></div>
+
+                @if(checkPolicy("A") && $is_a_preparer)
+                    <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <a type="button" href="{{ route('journalAdjustment.create') }}" class="btn btn-success float-end waves-effect waves-light">{{ __('button.rekod_baru') }}</a>
+                        </div>
+                    </div>
+                @endif
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" >
+                        <a class="nav-link active" data-bs-toggle="tab" href="#tindakan" role="tab" >Untuk Tindakan</a>
+                    </li>
+                    <li class="nav-item" >
+                        <a class="nav-link" data-bs-toggle="tab" href="#terdahulu" role="tab" >Senarai Terdahulu</a>
+                    </li>
+                </ul>    <br>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tindakan" role="tabpanel">
+                        <div id="datatable_wrapper">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped table-bordered dt-responsive nowrap w-100 dataTable indextable" role="grid" >
+                                        <thead class="bg-primary bg-gradient text-white">
+                                            <tr role="row">
+                                                <th class="text-center" width="5%">Bil</th>
+                                                <th class="text-center" width="25%">No. Jurnal Pelarasan</th>
+                                                <th class="text-center" width="25%">No. Penyata Pemungut</th>
+                                                <th class="text-center" width="20%">Tarikh Jurnal Pelarasan</th>
+                                                <th class="text-center" width="10%">Status</th>
+                                                <th class="text-center" width="15%">Tindakan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php   $journal_log = [];  @endphp     {{-- // Initialize an empty array --}}
+
+                                            @foreach ($journal_list as $bil => $journal)
+
+                                                @php
+                                                    $badge_transaction_status = (($journal->transaction_status_id == 4) ? "bg-success" : "bg-warning");
+                                                    $badge_transaction_status = ((in_array($journal->transaction_status_id, [6, 7, 8])) ? "bg-danger" : $badge_transaction_status);
+
+                                                    $batal = (($journal->transaction_status_id == 1) && ($journal->preparer_id == $login_officer->id)) ? true : false;
+                                                    $batal_selepas_lulus = (($journal->transaction_status_id == 4) && ($journal->ispeks_integration_id == 0) && ($journal->approver_id == $login_officer->id) ) ? true : false;
+                                                @endphp
+
+                                                @php
+                                                    //--------------------------------------------------------------------------------------------------------
+                                                    // GET LATEST LOG BEFORE KUIRI = CURRENT : KUIRI & BEFORE KUIRI : SAH SIMPAN
+                                                    // Penyedia batalkan penyata pemungut selepas pegawai penyemak kuiri
+                                                    //--------------------------------------------------------------------------------------------------------
+                                                    $journal_log = \App\Models\JournalLog::get_journal_log($journal->id);
+                                                    $remove_log  = $journal_log->pop();
+                                                    $last_log    = $journal_log->last();
+
+                                                    $batal_selepas_sah_simpan = (($journal->transaction_status_id == 5) && ($last_log->transaction_status_id == 2) && ($journal->preparer_id == $login_officer->id) ) ? true : false;
+                                                @endphp
+
+                                                <tr>
+                                                    <td class="text-center" tabindex="0" width="5%">{{$loop->iteration}}</td>
+                                                    <td class="text-center" width="25%">{{$journal->journal_no }}</td>
+                                                    <td class="text-center" width="25%">{{$journal->collector_statement?->collector_statement_no}}</td>
+                                                    <td class="text-center" width="20%">{{convertDateSys($journal->journal_date)}}</td>
+                                                    <td class="text-center" width="10%" ><span class="badge {{ $badge_transaction_status }} p-2 text-black">{{ $journal->transaction_status?->status ?? ''}}</span></td>
+                                                    <td class="text-center" width="15%">
+                                                    <div class="btn-group" role="group">
+                                                            @if(checkPolicy("U") || checkPolicy("V"))
+                                                                <a href="{{ route('journalAdjustment.edit', ['id' => $journal->id, 'tab' => 1]) }}" class="btn btn-outline-primary px-2 py-1 tooltip-icon">
+                                                                    <span class="tooltip-text">{{ __('button.buka') }}</span> <i class="{{ __('icon.open_folder') }}"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if(checkPolicy("D") && ($batal == true || $batal_selepas_lulus == true || $batal_selepas_sah_simpan == true))
+                                                                <a class="btn btn-outline-primary px-2 py-1 tooltip-icon swal-batal-jurnal" data-index="{{ $journal->id }}" data-page="index" >
+                                                                    <span class="tooltip-text">{{ __('button.batal') }}</span> <i class="{{ __('icon.delete') }}"></i>
+                                                                </a>
+                                                            @endif
+                                                        </div>
+                                                        <form method="POST" action="{{ route('journalAdjustment.cancel') }}" class="delete-form-list">
+                                                            {{ csrf_field() }}
+                                                            {{ method_field('DELETE') }}
+                                                            <input type="hidden" name="id" id="id" value="{{ $journal->id }}">
+                                                            <input type="hidden" name="cancel_remarks" id="cancel_remarks_{{ $journal->id }}" >
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="terdahulu" role="tabpanel">
+                        <div id="datatable_wrapper">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-bordered dt-responsive wrap w-100 dataTable indextable" role="grid">
+                                        <thead class="bg-primary bg-gradient text-white">
+                                            <tr role="row">
+                                                <th class="text-center" width="5%">Bil</th>
+                                                <th class="text-center" width="25%">No. Jurnal Pelarasan</th>
+                                                <th class="text-center" width="25%">No. Penyata Pemungut</th>
+                                                <th class="text-center" width="20%">Tarikh Jurnal Pelarasan</th>
+                                                <th class="text-center" width="10%">Status</th>
+                                                <th class="text-center" width="15%">Tindakan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($journal_history as $j_history)
+
+                                            @php
+                                                $lulus = ($j_history->transaction_status_id == 4);
+                                                $badge_transaction_status = (($lulus) ? "bg-success" : "bg-warning");
+                                                $badge_transaction_status = ((in_array($j_history->transaction_status_id, [6, 7, 8])) ? "bg-danger" : $badge_transaction_status);
+
+                                                $batal = (($j_history->transaction_status_id == 1) && ($j_history->preparer_id == $login_officer->id) && $j_history->data_status==1) ? true : false;
+                                                $batal_selepas_lulus = (($j_history->transaction_status_id == 4) && ($j_history->ispeks_integration_id == 0) && ($j_history->approver_id == $login_officer->id) ) ? true : false;
+                                            @endphp
+
+                                            @php
+                                                //--------------------------------------------------------------------------------------------------------
+                                                // Penyedia batalkan penyata pemungut selepas pegawai penyemak kuiri
+                                                //--------------------------------------------------------------------------------------------------------
+                                                $journal_log = \App\Models\JournalLog::get_journal_log($j_history->id);
+                                                $remove_log  = $journal_log->pop();
+                                                $last_log    = $journal_log->last();
+
+                                                $batal_selepas_sah_simpan = (($j_history->transaction_status_id == 5) && ($last_log->transaction_status_id == 2) && ($j_history->preparer_id == $login_officer->id) ) ? true : false;
+                                            @endphp
+
+                                                <tr>
+                                                    <td class="text-center" tabindex="0"  width="5%">{{ $loop->iteration}}</td>
+                                                    <td class="text-center" width="25%">{{ $j_history->journal_no}}</td>
+                                                    <td class="text-center" width="25%">{{ $j_history->collector_statement?->collector_statement_no}}</td>
+                                                    <td class="text-center" width="20%">{{ convertDateSys($j_history->journal_date)}}</td>
+                                                    <td class="text-center" width="10%"><span class="badge {{ $badge_transaction_status }} p-2 text-black">{{ $j_history->transaction_status?->status ?? ''}}</span></td>
+                                                    <td class="text-center" width="15%">
+                                                        <div class="btn-group" role="group">
+                                                            @if(checkPolicy("U") || checkPolicy("V"))
+                                                                <a href="{{ route('journalAdjustment.edit', ['id' => $j_history->id, 'tab' => 2]) }}" class="btn btn-outline-primary px-2 py-1 tooltip-icon">
+                                                                    <span class="tooltip-text">{{ __('button.buka') }}</span> <i class="{{ __('icon.open_folder') }}"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if(checkPolicy("D") && ($batal == true || $batal_selepas_lulus == true || $batal_selepas_sah_simpan == true))
+                                                                <a class="btn btn-outline-primary px-2 py-1 tooltip-icon swal-batal-jurnal" data-index="{{ $j_history->id }}" data-page="index" >
+                                                                    <span class="tooltip-text">{{ __('button.batal') }}</span> <i class="{{ __('icon.delete') }}"></i>
+                                                                </a>
+                                                            @endif
+                                                            @if($lulus)
+                                                                <a href="{{route('journalAdjustment.generate_pdf', [ 'id' => $j_history->id ]) }}" target="_blank" class="btn btn-outline-primary px-2 py-1 tooltip-icon" >
+                                                                    <span class="tooltip-text">{{ __('button.muat_turun_pdf') }}</span> <i class="{{ __('icon.file_pdf') }}"></i>
+                                                                </a>
+                                                            @endif
+                                                        </div>
+                                                        <form method="POST" action="{{ route('journalAdjustment.cancel') }}" class="delete-form-list">
+                                                            {{ csrf_field() }}
+                                                            {{ method_field('DELETE') }}
+                                                            <input type="hidden" name="id" id="id" value="{{ $j_history->id }}">
+                                                            <input type="hidden" name="cancel_remarks" id="cancel_remarks_{{ $j_history->id }}" >
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div>
+<!-- end row -->
+
+@endsection
+@section('script')
+    <script src="{{ URL::asset('assets/js/pages/JournalAdjustment/journalAdjustment.js')}}"></script>
+    <script src="{{ URL::asset('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+@endsection

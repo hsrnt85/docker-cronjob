@@ -1,0 +1,36 @@
+
+/* Style the tab */
+
+/* Style the tab content */
+.btn-sidemenu {
+    padding-left: 5px;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: solid 1px #eff2f7;
+	text-align: left !important;
+	width: 100% !important;
+    line-height: 30px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+/* Change background color of buttons on hover */
+.btn-sidemenu:hover{
+	background-color: #e4ffe4;
+    border-bottom: solid 2px #34c38f;
+    border-radius:0px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+	color: rgb(65, 63, 63);
+	font-weight: 600;
+}
+/* Change background color of buttons on active */
+.btn-sidemenu.active{
+    /* padding-left: 20px; */
+    background-color: #f0efef;
+    border-bottom: solid 2px #0d68d9;
+    border-radius:0px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+	color: rgb(65, 63, 63);
+	font-weight: 600;
+}

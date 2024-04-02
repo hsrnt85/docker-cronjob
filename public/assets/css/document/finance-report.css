@@ -1,0 +1,232 @@
+
+ body {
+    margin-top: 3.8cm;
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 0;
+    margin-right: 3px;
+}
+
+.payment-notice-report {
+    margin-top: 5.1cm !important;
+}
+
+/** Define the header rules **/
+header {
+    position: fixed;
+    top: 0cm;
+    left: 0cm;
+    right: 0cm;
+    height: 3cm;
+    font-size: 11px;
+}
+
+.subheader-payment-notice{
+    /* position: fixed; */
+    padding-bottom: 3.5cm;
+     /* font-size: 11px; */
+    /* margin-top: 3.5cm; */
+ }
+footer {
+    position: fixed;
+    bottom: 0cm;
+    left: 0cm;
+    right: 0cm;
+    font-size: 11px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.title_header {
+    margin-top: 1px;
+    font-size: 11px;
+    font-weight:bold;
+    margin-bottom: 2px;
+}
+.title {
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+.title_printed{
+    font-size: 11px;
+}
+.title_printed tr{
+    padding-bottom: 20px;
+}
+.grid_header {
+    font-size: 10px;
+    font-weight:bold;
+}
+.grid_content {
+    font-size: 10px;
+    font-weight:normal;
+}
+.grid_total {
+    font-size: 10px;
+    font-weight:bold;
+}
+tr.grid_header th{
+    padding: 6px;
+}
+tr.grid_content td{
+    padding: 5px;
+}
+tr.grid_logo td{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+tr.grid_total td{
+    padding: 6px;
+}
+.center{
+    text-align:center;
+}
+.right{
+    text-align:right;
+}
+.left{
+    text-align:left;
+}
+.uppercase{
+   text-transform: uppercase;
+}
+.pagenum:before {
+    content: counter(page);
+}
+.report {
+    position: relative;
+    padding-top: 2px; padding-bottom:2px; padding-left: 1px; padding-right: 1px; font-size: 11px; font-family: Arial, Helvetica, sans-serif;
+}
+.report_2 {
+    /* margin: 90px 25px; */
+    font-size: 10px;
+}
+.report_finance {
+    /* margin: 90px 25px; */
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.header {
+    /* font-size: 13px;
+    font-weight:bold;   */
+    margin-bottom: 10px;
+    position: absolute;
+    left:0px;
+    font-size: 11px;
+    width:100%;
+}
+.header-left{
+    float:left;
+}
+.header-right{
+    float:right;
+}
+.footer {
+    position: absolute;
+    left:0px;
+    bottom: 0px;
+    font-size: 10px;
+    width:100%;
+}
+.footer-left{
+    float:left;
+}
+.footer-right{
+    float:right;
+}
+tr.header_border th {
+    border-top: thin solid black;
+    border-bottom: thin solid black;
+    border-left: thin solid black;
+    border-right: thin solid black;
+}
+tr.border td {
+    border-top: thin solid black;
+    border-bottom: thin solid black;
+    border-left: thin solid black;
+    border-right: thin solid black;
+}
+tr.border th {
+    border-top: thin solid black;
+    border-bottom: thin solid black;
+    border-left: thin solid black;
+    border-right: thin solid black;
+}
+tr.title_header_padding td {
+    padding-top: 5px;
+    padding-bottom: 3px;
+}
+tr.title_padding td {
+    padding-bottom: 15px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/*  TABLE   */
+.info_content_border {
+    table-layout: auto;
+    border-color: black;
+    border-style: none;
+    width: 100%;
+    font-size: 9px;
+    /* margin-bottom: 2px; */
+}
+tr.info_content_border th{
+    border: 1px solid black;
+}
+tr.info_content_border td{
+    border: 1px solid black;
+}
+.border-solid{
+    border: 1px solid black;
+}
+.bold{
+    font-weight:bold;
+}
+.p-1 {
+    padding: 0.25rem !important;
+}
+
+.p-2 {
+padding: 0.5rem !important;
+}
+
+.p-3 {
+padding: 1rem !important;
+}
+
+.border-bottom {
+border-bottom: 1px solid #eff2f7 !important;
+}
+.pb-1 {
+    padding-bottom: 0.25rem !important;
+}
+.pb-2 {
+    padding-bottom: 0.5rem !important;
+}
+.pb-3 {
+    padding-bottom: 1rem !important;
+}
+.pb-4 {
+    padding-bottom: 1.5rem !important;
+}
+.pr-1 {
+    padding-right: 0.25rem !important;
+}
+.pr-2 {
+    padding-right: 0.5rem !important;
+}
+.pr-3 {
+    padding-right: 1rem !important;
+}
+.pr-4 {
+    padding-right: 1.5rem !important;
+}
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+.pt-4 {
+    padding-top: 1.5rem !important;
+}

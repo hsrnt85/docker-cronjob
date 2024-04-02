@@ -1,0 +1,176 @@
+
+body {
+    margin-top: 3.0cm;
+    margin-bottom: 1.5cm;
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 0;
+    margin-right: 3px;
+}
+
+/** Define the header rules **/
+header {
+    position: fixed;
+    top: 0cm;
+    left: 0cm;
+    right: 0cm;
+    bottom: 1cm;
+    height: 3cm;
+    font-size: 11px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0cm;
+    left: 0cm;
+    right: 0cm;
+    font-size: 11px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.title_header {
+    margin-top: 1px;
+    font-size: 11px;
+    font-weight:bold;
+    margin-bottom: 2px;
+}
+.title {
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+.title_printed{
+    font-size: 11px;
+}
+.title_printed tr{
+    padding-bottom: 20px;
+}
+.justify{
+    text-align: justify;
+}
+.center{
+    text-align:center;
+}
+.right{
+    text-align:right;
+}
+.left{
+    text-align:left;
+}
+.uppercase{
+   text-transform: uppercase;
+}
+.pagenum:before {
+    content: counter(page);
+}
+.report_finance {
+    /* margin: 90px 25px; */
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.header {
+    /* font-size: 13px;
+    font-weight:bold;   */
+    margin-bottom: 10px;
+    position: absolute;
+    left:0px;
+    font-size: 11px;
+    width:100%;
+}
+.header-left{
+    float:left;
+}
+.header-right{
+    float:right;
+}
+.footer {
+    position: absolute;
+    left:0px;
+    bottom: 0px;
+    font-size: 10px;
+    width:100%;
+}
+.footer-left{
+    float:left;
+}
+.footer-right{
+    float:right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/*  TABLE   */
+.info_content_border {
+    table-layout: auto;
+    border-color: black;
+    border-style: none;
+    width: 100%;
+    font-size: 10px;
+    /* margin-bottom: 2px; */
+}
+tr.info_content_border th{
+    border: 1px solid black;
+}
+tr.info_content_border td{
+    border: 1px solid black;
+}
+.border-solid{
+    border: 1px solid black;
+}
+.bold{
+    font-weight:bold;
+}
+.fw-bold{
+    font-weight:bold;
+}
+.p-1 {
+    padding: 0.25rem !important;
+}
+
+.p-2 {
+padding: 0.5rem !important;
+}
+
+.p-3 {
+padding: 1rem !important;
+}
+
+.border-bottom {
+border-bottom: 1px solid #eff2f7 !important;
+}
+.pb-1 {
+    padding-bottom: 0.25rem !important;
+}
+.pb-2 {
+    padding-bottom: 0.5rem !important;
+}
+.pb-3 {
+    padding-bottom: 1rem !important;
+}
+.pb-4 {
+    padding-bottom: 1.5rem !important;
+}
+.pr-1 {
+    padding-right: 0.25rem !important;
+}
+.pr-2 {
+    padding-right: 0.5rem !important;
+}
+.pr-3 {
+    padding-right: 1rem !important;
+}
+.pr-4 {
+    padding-right: 1.5rem !important;
+}
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+.pt-4 {
+    padding-top: 1.5rem !important;
+}
+
+ .ms-1 {
+    margin-left: 0.25rem !important;
+}

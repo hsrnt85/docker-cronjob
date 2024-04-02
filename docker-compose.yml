@@ -1,0 +1,31 @@
+version: '3.7'
+services: 
+  app:
+    image: 'cronjob:cronjob'
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www/html
+  db:
+    image: mysql:5.7
+    restart: always
+    ports: 
+      - "3307:3306"
+    environment:
+      DB_HOST: 'db'
+      DB_PORT: '3306'
+      DB_DATABASE: 'laravelapp_db'
+      DB_USERNAME: 'root'
+      DB_PASSWORD: ''
+
+      MAIL_DRIVER: smtp
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 465
+      MAIL_USERNAME: devrnt123@gmail.com
+      MAIL_PASSWORD: mshyivzfmhxpcibo
+      MAIL_ENCRYPTION: ssl
+      MAIL_FROM_NAME:
+
+    volumes:
+      - ./db:/var/lib/mysql

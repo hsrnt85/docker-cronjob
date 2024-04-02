@@ -1,0 +1,37 @@
+
+/* modal css  */
+.container {
+    position: relative;
+}
+.container:before {
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;
+}
+.container button {
+  position: absolute;
+  top: 10%;
+  left: 80%;
+  /* transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); */
+  opacity:0;
+}
+.container:hover button {
+  opacity: 1;
+  background-color: black;
+  color: white;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.container:hover button {
+    opacity: 1;
+    background-color: black;
+    color: white;
+  }
+
+.container:hover img {
+  opacity:0.5;
+}
+
+.dataTables_wrapper .dataTables_filter{ display: none; }
