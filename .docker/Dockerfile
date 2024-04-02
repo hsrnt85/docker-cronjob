@@ -4,9 +4,6 @@ USER root
 
 WORKDIR /var/www/html 
 
-# Workaround https://unix.stackexchange.com/questions/2544/how-to-work-around-release-file-expired-problem-on-a-local-mirror
-
-RUN echo "Acquire::Check-Valid-Until \"false\";\nAcquire::Check-Date \"false\";" | cat > /etc/apt/apt.conf.d/10no--check-valid-until
 
 RUN apt-get update && apt-get install -y \
          libpng-dev \
@@ -36,7 +33,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY ./ /var/www/html/
     
 # Add cron job file
-ADD cronjobs /etc/cron.d/cronjobs
+ADD ./cronjobs /etc/cron.d/cronjobs
 # Give execution rights on the cron job file
 RUN chmod 0644 /etc/cron.d/cronjobs
 # Apply cron job
